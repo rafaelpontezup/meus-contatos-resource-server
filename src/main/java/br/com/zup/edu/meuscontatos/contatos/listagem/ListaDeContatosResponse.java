@@ -8,15 +8,13 @@ import static java.util.stream.Collectors.toList;
 
 public class ListaDeContatosResponse {
 
-    private List<ContatoResponse> contatos;
+    @Deprecated
+    private ListaDeContatosResponse(){}
 
-    public ListaDeContatosResponse(List<Contato> contatos) {
-        this.contatos = contatos.stream().map((contato) -> {
+    public static List<ContatoResponse> of(List<Contato> contatos) {
+        return contatos.stream().map((contato) -> {
             return new ContatoResponse(contato);
         }).collect(toList());
     }
 
-    public List<ContatoResponse> getContatos() {
-        return contatos;
-    }
 }

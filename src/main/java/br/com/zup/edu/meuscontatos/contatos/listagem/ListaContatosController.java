@@ -17,11 +17,9 @@ public class ListaContatosController {
 
     @GetMapping("/api/contatos")
     public ResponseEntity<?> lista() {
-
         List<Contato> contatos = repository.findAll();
-
         return ResponseEntity
-                .ok(new ListaDeContatosResponse(contatos));
+                .ok(ListaDeContatosResponse.of(contatos));
     }
 
 }
