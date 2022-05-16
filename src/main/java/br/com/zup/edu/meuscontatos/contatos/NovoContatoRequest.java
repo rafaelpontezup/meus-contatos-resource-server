@@ -33,8 +33,8 @@ public class NovoContatoRequest {
         return telefones;
     }
 
-    public Contato toModel() {
-        Contato contato = new Contato(nome, empresa, "anonymous");
+    public Contato toModel(String usuario) {
+        Contato contato = new Contato(nome, empresa, usuario);
         telefones.forEach(t -> {
             contato.adiciona(t.toModel());
         });

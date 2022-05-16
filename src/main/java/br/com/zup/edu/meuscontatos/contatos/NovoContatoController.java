@@ -2,6 +2,8 @@ package br.com.zup.edu.meuscontatos.contatos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +21,13 @@ public class NovoContatoController {
 
     @Transactional
     @PostMapping("/api/contatos")
-    public ResponseEntity<?> cadastra(@RequestBody @Valid NovoContatoRequest request, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> cadastra(@RequestBody @Valid NovoContatoRequest request,
+                                      UriComponentsBuilder uriBuilder,
+                                      @AuthenticationPrincipal Jwt user) {
 
-        Contato contato = request.toModel();
+        String usuario = user.getClaim("preferred_username");
+
+        Contato contato = request.toModel(usuario);
         repository.save(contato);
 
         URI location = uriBuilder
