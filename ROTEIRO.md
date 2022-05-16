@@ -74,3 +74,62 @@ Contato contato = request.toModel(usuario);
 13. Cadastra novo contato;
 14. Detalha contato cadastrado e exibe campo `criadoPor`;
 15. Finaliza;
+
+## Escrevendo testes de integração para API REST protegida por OAuth2
+
+1. Introdução sobre o projeto: **Meus Contatos**;
+2. Conhecendo a API REST no Insomnia;
+3. Rodando a bateria de testes e vendo-a **quebrar com 401/403**;
+4. Configurando Maven:
+```xml
+<dependency>
+   <groupId>org.springframework.security</groupId>
+   <artifactId>spring-security-test</artifactId>
+</dependency>
+```
+5. No teste `DetalhaContatoControllerTest`, adicione o token JWT na request:
+```java
+// import static
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
+
+// adiciona token na request        
+mockMvc.perform(GET("/api/contatos/{id}", contato.getId())
+        .with(jwt()
+            .authorities(new SimpleGrantedAuthority("SCOPE_contatos:read"))
+        ))
+    .andExpect(status().isOk())
+    ;
+```
+6. Rode o teste e veja passar;
+7. No próximo teste, faz a mesma coisa;
+8. No teste `NovoContatoControllerTest`, adicione o token JWT na request:
+```java
+// import static
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
+
+// adiciona token na request        
+mockMvc.perform(POST("/api/contatos", ...)
+        .with(jwt()
+            .authorities(new SimpleGrantedAuthority("SCOPE_contatos:write"))
+        ))
+    .andExpect(status().isOk())
+    ;
+```
+9. Rode o teste e veja **quebrar**: falta o `preferred_username`;
+10. Explique o problema;
+11. Adicione a claim `preferred_username` no token:
+```java
+// adiciona token na request        
+mockMvc.perform(POST("/api/contatos", ...)
+        .with(jwt()
+           .jwt(jwt -> {
+                jwt.claim("preferred_username", "rponte");
+           })
+           .authorities(new SimpleGrantedAuthority("SCOPE_contatos:write"))
+        ))
+    .andExpect(status().isOk())
+    ;
+```
+12. Rode o teste e veja passar;
+13. Faz a mesma coisa no proximo teste;
+14. Implementa cenários para **401** e **403**;
