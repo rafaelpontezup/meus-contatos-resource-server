@@ -10,12 +10,14 @@ public class DetalheDoContatoResponse {
     private final Long id;
     private final String nome;
     private final String empresa;
+    private final String criadoPor;
     private final List<DetalheDoTelefone> telefones;
 
     public DetalheDoContatoResponse(Contato contato) {
         this.id = contato.getId();
         this.nome = contato.getNome();
         this.empresa = contato.getEmpresa();
+        this.criadoPor = contato.getCriadoPor();
         this.telefones = contato.getTelefones().stream().map((t) -> {
             return new DetalheDoTelefone(t);
         }).collect(Collectors.toList());
@@ -31,6 +33,10 @@ public class DetalheDoContatoResponse {
 
     public String getEmpresa() {
         return empresa;
+    }
+
+    public String getCriadoPor() {
+        return criadoPor;
     }
 
     public List<DetalheDoTelefone> getTelefones() {

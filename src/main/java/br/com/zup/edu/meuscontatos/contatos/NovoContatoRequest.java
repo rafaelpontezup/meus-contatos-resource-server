@@ -34,7 +34,7 @@ public class NovoContatoRequest {
     }
 
     public Contato toModel() {
-        Contato contato = new Contato(nome, empresa);
+        Contato contato = new Contato(nome, empresa, "anonymous");
         telefones.forEach(t -> {
             contato.adiciona(t.toModel());
         });

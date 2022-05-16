@@ -1,6 +1,7 @@
 package br.com.zup.edu.meuscontatos.contatos;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +21,17 @@ public class Contato {
     )
     private List<Telefone> telefones = new ArrayList<>();
 
+    @NotBlank
+    @Column(nullable = false, updatable = false)
+    private String criadoPor;
+
     @Deprecated
     public Contato(){}
 
-    public Contato(String nome, String empresa) {
+    public Contato(String nome, String empresa, String criadoPor) {
         this.nome = nome;
         this.empresa = empresa;
+        this.criadoPor = criadoPor;
     }
 
     public Long getId() {
@@ -49,6 +55,10 @@ public class Contato {
     }
     public void setEmpresa(String empresa) {
         this.empresa = empresa;
+    }
+
+    public String getCriadoPor() {
+        return criadoPor;
     }
 
     public void adiciona(Telefone telefone) {
