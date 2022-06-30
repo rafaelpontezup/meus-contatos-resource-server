@@ -22,6 +22,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe().disable()
                 .formLogin().disable()
                 .logout().disable()
+                .requestCache().disable()
                 .headers().frameOptions().deny()
             .and()
                 .sessionManagement()
